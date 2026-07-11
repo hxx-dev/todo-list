@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useState, useRef } from "react";
 
 const Container = styled.div`
   display: flex;
@@ -22,11 +23,39 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
-function Editor() {
+function Editor({ onCreate }) {
+  const [content, setContent] = useState("");
+
+  const contentRef = useRef();
+
+  const handleChange = (e) => {
+    setContent(e.target.value);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      onSubmit();
+    }
+  };
+
+  const onSubmit = () => {
+    if (content === "") {
+      contentRef.current.focus();
+      return;
+    }
+    onCreate(content);
+    setContent("");
+  };
   return (
     <Container>
-      <Input placeholder="새로운 todo..." />
-      <Button>추가</Button>
+      <Input
+        ref={contentRef}
+        value={content}
+        onKeyDown={handleKeyDown}
+        onChange={handleChange}
+        placeholder="새로운 todo..."
+      />
+      <Button onClick={onSubmit}>추가</Button>
     </Container>
   );
 }
