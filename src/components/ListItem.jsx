@@ -28,10 +28,19 @@ const Button = styled.button`
   border-radius: 5px;
   padding: 5px;
 `;
-function ListItem({ id, isDone, content, date }) {
+function ListItem({ id, isDone, content, date, onUpdate }) {
+  const handleUpdate = () => {
+    onUpdate(id);
+  };
+
   return (
     <Container>
-      <CheckBox readOnly checked={isDone} type="checkbox" />
+      <CheckBox
+        onChange={handleUpdate}
+        readOnly
+        checked={isDone}
+        type="checkbox"
+      />
       <Content>{content}</Content>
       <DateText>{new Date(date).toLocaleDateString()}</DateText>
       <Button>삭제</Button>
