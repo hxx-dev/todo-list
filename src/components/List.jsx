@@ -26,7 +26,7 @@ const ListContainer = styled.div`
   flex-direction: column;
   gap: 20px;
 `;
-function List({ todos, onUpdate }) {
+function List({ todos, onUpdate, onDelete }) {
   const [search, setSearch] = useState("");
 
   const handleChangeSearch = (e) => {
@@ -52,7 +52,14 @@ function List({ todos, onUpdate }) {
       />
       <ListContainer>
         {filteredTodos.map((todo) => {
-          return <ListItem key={todo.id} {...todo} onUpdate={onUpdate} />;
+          return (
+            <ListItem
+              key={todo.id}
+              {...todo}
+              onUpdate={onUpdate}
+              onDelete={onDelete}
+            />
+          );
         })}
       </ListContainer>
     </Container>
