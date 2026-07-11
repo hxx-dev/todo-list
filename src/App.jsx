@@ -37,7 +37,9 @@ const mockData = [
 
 function App() {
   const [todos, setTodos] = useState(mockData);
+
   const idRef = useRef(3);
+
   const onCreate = (content) => {
     const newTodo = {
       id: idRef.current++,
@@ -48,11 +50,18 @@ function App() {
 
     setTodos([newTodo, ...todos]); // 상태 변환 함수를 사용
   };
+  const onUpdate = (targetId) => {
+    setTodos(
+      todos.map((todo) =>
+        todo.id === targetId ? { ...todo, isDone: !todo.isDone } : todo,
+      ),
+    );
+  };
   return (
     <Container>
       <Header />
       <Editor onCreate={onCreate} />
-      <List todos={todos} />
+      <List todos={todos} onUpdate={onUpdate} />
     </Container>
   );
 }
