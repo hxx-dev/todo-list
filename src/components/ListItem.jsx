@@ -16,7 +16,7 @@ const Content = styled.div`
   flex: 1;
 `;
 
-const Date = styled.div`
+const DateText = styled.div`
   color: gray;
   font-size: 14px;
 `;
@@ -28,12 +28,12 @@ const Button = styled.button`
   border-radius: 5px;
   padding: 5px;
 `;
-function ListItem() {
+function ListItem({ id, isDone, content, date }) {
   return (
     <Container>
-      <CheckBox type="checkbox" />
-      <Content>todo~~</Content>
-      <Date>date</Date>
+      <CheckBox readOnly checked={isDone} type="checkbox" />
+      <Content>{content}</Content>
+      <DateText>{new Date(date).toLocaleDateString()}</DateText>
       <Button>삭제</Button>
     </Container>
   );
