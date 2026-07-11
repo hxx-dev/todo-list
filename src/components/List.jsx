@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import ListItem from "./ListItem";
+import { useState } from "react";
 
 const Container = styled.div`
   display: flex;
@@ -25,15 +26,34 @@ const ListContainer = styled.div`
   flex-direction: column;
   gap: 20px;
 `;
-function List() {
+function List({ todos }) {
+  const [search, setSearch] = useState("");
+
+  const handleChangeSearch = (e) => {
+    setSearch(e.target.value);
+  };
+
+  const getFilteredData = () => {
+    if (search === "") {
+      return todos;
+    }
+    return todos.filter((todo) => {
+      return todo.content.toLowerCase().includes(search.toLowerCase());
+    });
+  };
+  const filteredTodos = getFilteredData();
   return (
     <Container>
       <h4>Todo List 🔥</h4>
-      <SearchInput placeholder="검색어를 입력하세요" />
+      <SearchInput
+        value={search}
+        onChange={handleChangeSearch}
+        placeholder="검색어를 입력하세요"
+      />
       <ListContainer>
-        <ListItem />
-        <ListItem />
-        <ListItem />
+        {filteredTodos.map((todo) => {
+          return <ListItem key={todo.id} {...todo} />;
+        })}
       </ListContainer>
     </Container>
   );
