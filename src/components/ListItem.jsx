@@ -28,11 +28,13 @@ const Button = styled.button`
   border-radius: 5px;
   padding: 5px;
 `;
-function ListItem({ id, isDone, content, date, onUpdate }) {
+function ListItem({ id, isDone, content, date, onUpdate, onDelete }) {
   const handleUpdate = () => {
     onUpdate(id);
   };
-
+  const handleDelete = () => {
+    onDelete(id);
+  };
   return (
     <Container>
       <CheckBox
@@ -43,7 +45,7 @@ function ListItem({ id, isDone, content, date, onUpdate }) {
       />
       <Content>{content}</Content>
       <DateText>{new Date(date).toLocaleDateString()}</DateText>
-      <Button>삭제</Button>
+      <Button onClick={handleDelete}>삭제</Button>
     </Container>
   );
 }
