@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { memo } from "react";
 
 const DateText = styled.h1`
   color: rgb(37, 147, 255);
@@ -13,4 +14,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default memo(Header);

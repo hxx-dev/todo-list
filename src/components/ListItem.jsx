@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { memo } from "react";
 
 const Container = styled.div`
   display: flex;
@@ -50,4 +51,14 @@ function ListItem({ id, isDone, content, date, onUpdate, onDelete }) {
   );
 }
 
-export default ListItem;
+export default memo(ListItem, (prevProps, nextProps) => {
+  if (prevProps.id !== nextProps.id) return false;
+  if (prevProps.isDone !== nextProps.isDone) return false;
+  if (prevProps.content !== nextProps.content) return false;
+  if (prevProps.date !== nextProps.date) return false;
+  return true;
+});
+// js 객체 타입으로 onUpdate, onDelete가 재생성될 때마다 리렌더링이 발생함
+// memo는 얕은 비교로 props 변경을 판단하기 때문
+// memo의 두 번째 인자로 props를 비교하는 콜백함수를 받음
+// 콜백함수의 return이 F면 리렌더 O, T면 리렌더 X
