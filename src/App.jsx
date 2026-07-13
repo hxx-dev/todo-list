@@ -2,7 +2,7 @@ import Header from "./components/Header";
 import Editor from "./components/Editor";
 import List from "./components/List";
 import styled from "styled-components";
-import { useState, useRef, useReducer } from "react";
+import { useState, useRef, useReducer, createContext } from "react";
 
 const Container = styled.div`
   /* 세로로 배치, flex를 사용하면 div태그 가로로 배치됨 이때 방향 colomn 사용 -> 세로로 */
@@ -50,6 +50,8 @@ function reducer(state, action) {
   }
 }
 
+export const TodoContext = createContext();
+
 function App() {
   const [todos, dispatch] = useReducer(reducer, mockData);
 
@@ -81,8 +83,17 @@ function App() {
   return (
     <Container>
       <Header />
-      <Editor onCreate={onCreate} />
-      <List todos={todos} onUpdate={onUpdate} onDelete={onDelete} />
+      <TodoContext.Provider
+        value={{
+          todos,
+          onCreate,
+          onUpdate,
+          onDelete,
+        }}
+      >
+        <Editor />
+        <List />
+      </TodoContext.Provider>
     </Container>
   );
 }
