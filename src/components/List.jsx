@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import ListItem from "./ListItem";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 const Container = styled.div`
   display: flex;
@@ -29,6 +29,19 @@ const ListContainer = styled.div`
 function List({ todos, onUpdate, onDelete }) {
   const [search, setSearch] = useState("");
 
+  const { totalCount, doneCount, notDoneCount } = useMemo(() => {
+    const totalCount = todos.length;
+    const doneCount = todos.filter((todo) => todo.isDone).length;
+    const notDoneCount = totalCount - doneCount;
+    //useMemo로 최적화
+    //deps가 변경될 때만 콜백함수 실행
+    return {
+      totalCount,
+      doneCount,
+      notDoneCount,
+    };
+  }, [todos]);
+
   const handleChangeSearch = (e) => {
     setSearch(e.target.value);
   };
@@ -45,6 +58,11 @@ function List({ todos, onUpdate, onDelete }) {
   return (
     <Container>
       <h4>Todo List 🔥</h4>
+      <div>
+        <div>total : {totalCount}</div>
+        <div>Done : {doneCount}</div>
+        <div>notDone : {notDoneCount}</div>
+      </div>
       <SearchInput
         value={search}
         onChange={handleChangeSearch}
