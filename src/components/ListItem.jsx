@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { memo } from "react";
+import { memo, useContext } from "react";
+import { TodoContext } from "../App";
 
 const Container = styled.div`
   display: flex;
@@ -29,7 +30,9 @@ const Button = styled.button`
   border-radius: 5px;
   padding: 5px;
 `;
-function ListItem({ id, isDone, content, date, onUpdate, onDelete }) {
+function ListItem({ id, isDone, content, date }) {
+  const { onUpdate, onDelete } = useContext(TodoContext);
+
   const handleUpdate = () => {
     onUpdate(id);
   };

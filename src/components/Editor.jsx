@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
+import { TodoContext } from "../App";
 
 const Container = styled.div`
   display: flex;
@@ -23,9 +24,9 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
-function Editor({ onCreate }) {
+function Editor() {
   const [content, setContent] = useState("");
-
+  const { onCreate } = useContext(TodoContext);
   const contentRef = useRef();
 
   const handleChange = (e) => {

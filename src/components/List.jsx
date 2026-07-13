@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import ListItem from "./ListItem";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useContext } from "react";
+import { TodoContext } from "../App";
 
 const Container = styled.div`
   display: flex;
@@ -26,8 +27,9 @@ const ListContainer = styled.div`
   flex-direction: column;
   gap: 20px;
 `;
-function List({ todos, onUpdate, onDelete }) {
+function List() {
   const [search, setSearch] = useState("");
+  const { todos, onUpdate, onDelete } = useContext(TodoContext);
 
   const { totalCount, doneCount, notDoneCount } = useMemo(() => {
     const totalCount = todos.length;
@@ -74,8 +76,6 @@ function List({ todos, onUpdate, onDelete }) {
             <ListItem
               key={todo.id}
               {...todo}
-              onUpdate={onUpdate}
-              onDelete={onDelete}
             />
           );
         })}
