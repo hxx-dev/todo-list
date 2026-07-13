@@ -2,7 +2,14 @@ import Header from "./components/Header";
 import Editor from "./components/Editor";
 import List from "./components/List";
 import styled from "styled-components";
-import { useState, useRef, useReducer } from "react";
+import {
+  useState,
+  useRef,
+  useReducer,
+  createContext,
+  useCallback,
+  useMemo,
+} from "react";
 
 const Container = styled.div`
   /* 세로로 배치, flex를 사용하면 div태그 가로로 배치됨 이때 방향 colomn 사용 -> 세로로 */
@@ -50,12 +57,15 @@ function reducer(state, action) {
   }
 }
 
+export const TodoStateContext = createContext();
+export const TodoDispatchContext = createContext();
+
 function App() {
   const [todos, dispatch] = useReducer(reducer, mockData);
 
   const idRef = useRef(3);
 
-  const onCreate = (content) => {
+  const onCreate = useCallback((content) => {
     dispatch({
       type: "CREATE",
       data: {
@@ -65,24 +75,32 @@ function App() {
         date: new Date().getTime(),
       },
     });
-  };
-  const onUpdate = (targetId) => {
+  });
+  const onUpdate = useCallback((targetId) => {
     dispatch({
       type: "UPDATE",
       targetId: targetId,
     });
-  };
-  const onDelete = (targetId) => {
+  });
+  const onDelete = useCallback((targetId) => {
     dispatch({
       type: "DELETE",
       targetId: targetId,
     });
-  };
+  });
+
+  const memoizedDispatch = useMemo(() => {
+    return { onCreate, onUpdate, onDelete };
+  }, []);
   return (
     <Container>
       <Header />
-      <Editor onCreate={onCreate} />
-      <List todos={todos} onUpdate={onUpdate} onDelete={onDelete} />
+      <TodoStateContext.Provider value={todos}>
+        <TodoDispatchContext.Provider value={memoizedDispatch}>
+          <Editor />
+          <List />
+        </TodoDispatchContext.Provider>
+      </TodoStateContext.Provider>
     </Container>
   );
 }
